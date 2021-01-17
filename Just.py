@@ -46,10 +46,27 @@ def PostDaily():
     content = session.post(url, json=data, headers=headers)
     return content.text
 
+def Json():
+    json_str = json.dumps(PostDaily())
+    # 将 JSON 对象转换为 Python 字典
+    data2 = json.loads(json.loads(json_str))
+    return data2
+
 def Server():
     api = "https://sc.ftqq.com/你的key.send"
-    title = "江苏科技大学"+" "+tbrq+" "+"打卡任务简报"
-    content = PostDaily()+'\n'+'提交时间'+tjsj
+    title = "江苏科技大学" + " " + tbrq + " " + "打卡任务简报"
+    content = "提交状态：  " + Json()["result"] + '   (1表示提交成功，其他表示失败)' \
+              + '\n' + '\n' + "姓名：  " + Json()["resultEntity"]["sqrmc"] \
+              + '\n' + '\n' + "性别：  " + Json()["resultEntity"]["xb"] + '   (1表示男，2表示女)' \
+              + '\n' + '\n' + "学号：  " + Json()["resultEntity"]["gh"] \
+              + '\n' + '\n' + "身份证号：  " + Json()["resultEntity"]["sfzh"] \
+              + '\n' + '\n' + "联系电话：  " + Json()["resultEntity"]["lxdh"] \
+              + '\n' + '\n' + "今晨体温：  " + Json()["resultEntity"]["tw"] + "℃" \
+              + '\n' + '\n' + "昨晚体温：  " + Json()["resultEntity"]["zwtw"] + "℃" \
+              + '\n' + '\n' + "籍贯省：  " + Json()["resultEntity"]["jgshen"] \
+              + '\n' + '\n' + "籍贯市：  " + Json()["resultEntity"]["jgshi"] \
+              + '\n' + '\n' + "今日居住地详细地址：  " + Json()["resultEntity"]["jrjzdxxdz"] \
+              + '\n' + '\n' + '提交时间:    ' + tjsj
     data = {
         "text": title,
         "desp": content
@@ -60,6 +77,7 @@ def Server():
 session = getSession()
 res = session.get('http://ehall.just.edu.cn/default/work/jkd/jkxxtb/jkxxcj.jsp')
 PostDaily()
+Json()
 Server()
 
 
